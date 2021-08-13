@@ -1,0 +1,30 @@
+{% extends 'blog/inventory.html' %}
+
+{% block title %}Add Item{% endblock %}
+{% block header %}
+
+{% endblock %}
+
+{% block content %}
+    {% if g.admn %}
+        <div class="flex flex-col items-center m-auto h-screen bg-teal-lighter w-4/12">
+            <div class="w-full bg-white rounded shadow-lg p-8 m-4">
+              <h1 class="block w-full text-center text-3xl text-bold text-grey-darkest mb-6">Add Item to Inventory</h1>
+              <form class="mb-4" method="POST">
+                <div class="flex flex-col mb-4">
+                  <input class="border py-2 px-3 text-grey-darkest" placeholder="Item Name" name="itemname" id="itemname" required>
+                </div> 
+                <div class="flex flex-col mb-4">
+                  <input type="number" min="1" max="2000" step="1" id="n" oninput="(validity.valid)||(value='');" class="border py-2 px-3 text-grey-darkest" placeholder="Cost in '₹'" type="number" name="itemcost" id="itemcost" required>
+                </div> 
+                <div class="flex flex-col mb-4">
+                    <input type="number" min="1" max="1000" step="1" id="n" oninput="(validity.valid)||(value='');" class="border py-2 px-3 text-grey-darkest" placeholder="Quantity" type="number" name="itemquant" id="itemquant" required>
+                </div> 
+                <div class="flex justify-center">
+                    <button class="py-2 px-4 font-semibold rounded-lg shadow-md text-white align-center bg-green-500 hover:bg-green-700" type="submit">Add</button>
+                </div>
+              </form>
+            </div>
+        </div>
+    {% endif %}    
+{% endblock %}      

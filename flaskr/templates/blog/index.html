@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+{% block header %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="flex justify-center flex-row pt-8 pr-8 space-x-20">
+  <p class="mt-2 text-black-500 font-bold text-lg">Order Print Out</p>
+  <a href="{{ url_for('blog.upload') }}" class="py-2 px-4 font-semibold rounded-lg shadow-md text-white align-center bg-green-500 hover:bg-green-700" >Upload .pdf file</a>
+</div>
+
+<div class="flex justify-center flex-row pt-8 pr-8 space-x-20">
+  <p class="mt-2 text-black-500 font-bold text-3xl">Order Summary</p>
+</div>
+
+<div class="grid grid-cols-2 divide-x space-y-5">
+  <div class="flex flex-col m-auto h-screen bg-teal-lighter w-3/4 py-10">
+    <h2 class="text-2xl text-left font-bold py-4 space-y-2">Print orders</h2>
+    {% for order in printorders %}
+      {% if g.user['id'] == order['printorder_id'] %}
+        <article>
+          <header>
+            <div class="container">
+              <h2 class="text-lg text-left font-bold">{{ order['f_name'] }}</h2>
+              <p class="text-xs">by {{ order['firstname'] }} {{ order['lastname'] }} on {{ order['created'].strftime('%d-%m-%Y') }}</p>
+              <h2 class="text-right">Cost : ₹{{ order['file_cost'] }}</h2>
+  
+              <h2 class="text-left text-lg">Order Status : 
+                {% if order['confirmation_admin'] == "Confirmed" %}
+                    <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-black-500 bg-green-500" type="submit" value="{{ order['confirmation_admin'] }}">
+                {% elif order['confirmation_admin'] == "Declined" %}
+                    <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-black-500 bg-red-500" type="submit" value="{{ order['confirmation_admin'] }}">
+                {% else %}
+                    <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-black-500 bg-yellow-500" type="submit" value="{{ order['confirmation_admin'] }}">
+                {% endif %}
+              </h2>
+  
+            </div>
+          </header>
+        </article>
+        {% if not loop.last %}
+          <hr>
+        {% endif %}
+      {% endif %}  
+    {% endfor %}
+  </div>
+
+  <div class="flex flex-col m-auto h-screen bg-teal-lighter w-3/4 py-10 px-10">
+    <h2 class="text-2xl text-left font-bold py-4">Inventory orders</h2>
+    {% for order in itemorders %}
+      {% if g.user['id'] == order['order_id'] %}
+        <article>
+          <header>
+            <div class="container">
+              <h2 class="text-lg text-left font-bold">{{ order['item_quantity'] }} x {{ order['item_name'] }}</h2>
+              <p class="text-xs">by {{ order['firstname'] }} {{ order['lastname'] }} on {{ order['order_created'].strftime('%d-%m-%Y') }}</p>
+              <h2 class="text-right">Cost : ₹{{ order['order_cost'] }}</h2>
+  
+              <!-- <h2 class="text-left text-lg">Order Status : 
+                {% if order['confirmation_admin'] == "Confirmed" %}
+                    <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-black-500 bg-green-500" type="submit" value="{{ order['confirmation_admin'] }}">
+                {% elif order['confirmation_admin'] == "Declined" %}
+                    <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-black-500 bg-red-500" type="submit" value="{{ order['confirmation_admin'] }}">
+                {% else %}
+                    <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-black-500 bg-yellow-500" type="submit" value="{{ order['confirmation_admin'] }}">
+                {% endif %}
+              </h2> -->
+  
+            </div>
+          </header>
+        </article>
+        {% if not loop.last %}
+          <hr>
+        {% endif %}
+      {% endif %}  
+    {% endfor %}
+  </div>
+
+  <div>
+
+  </div>
+</div>
+  
+
+{% endblock %}

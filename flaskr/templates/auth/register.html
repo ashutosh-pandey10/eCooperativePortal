@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="flex flex-col m-auto h-screen bg-teal-lighter w-4/12">
+  <div class="w-full bg-white rounded shadow-lg p-8 m-4">
+    <h1 class="block w-full text-center text-3xl font-bold text-grey-darkest mb-6">Register</h1>
+    <form method="post" class="flex flex-col p-5 space-y-4 ">
+    <label for="username">Enrollment Id</label>
+    <input class="border py-2 px-3 text-grey-darkest" name="username" id="username" required>
+
+    <label for="firstname">First Name</label>
+    <input class="border py-2 px-3 text-grey-darkest" name="firstname" id="firstname" required>
+
+    <label for="lastname">Last Name</label>
+    <input class="border py-2 px-3 text-grey-darkest" name="lastname" id="lastname" required>
+
+    <label for="mobileno">Mobile number</label>
+    <input class="border py-2 px-3 text-grey-darkest" name="mobileno" id="mobileno" required>
+
+    <label for="emailid">Email Id (*optional)</label>
+    <input class="border py-2 px-3 text-grey-darkest" name="emailid" id="emailid">
+
+    <label for="password">Password</label>
+    <input class="border py-2 px-3 text-grey-darkest" type="password" name="password" id="password" required>
+
+    <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-green-500 hover:bg-green-700" type="submit" value="Register">
+  </form>
+  </div>
+  
+</div>
+{% endblock %}
