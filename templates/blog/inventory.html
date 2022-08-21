@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<title>{% block title %}Inventory{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='tailwind.css') }}">
+
+
+<nav class="flex flex-wrap items-center justify-between p-5 bg-gray-600">
+    
+    <div class="toggle hidden md:flex w-full md:w-auto text-right text-bold mt-5 md:mt-0 border-t-2 border-blue-900 md:border-none text-4xl">
+        {% if g.admn %}
+            <h1><a class="text-gray-200" href="{{ url_for('admin.home') }}" >E-Cooperative Portal</a></h1>
+        {% else %}
+            <h1><a class="text-gray-200" href="{{ url_for('blog.index') }}" >E-Cooperative Portal</a></h1>
+        {% endif %}
+    </div>   
+                
+    <div class = "toggle hidden md:flex space-x-4 w-full md:w-auto text-right text-bold mt-5 md:mt-0 border-t-2 border-blue-900 md:border-none">
+        {% if g.user %}
+            <li class="block text-blue-200 py-2 px-4 border-b-2 border-blue-900 md:border-none font-bold">{{ g.user['firstname'] }}</li>
+            <!-- <a href="{{ url_for('inventory.view') }}" class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-red-600 hover:bg-red-700">Inventory</a> -->
+            <a href="{{ url_for('auth.logout') }}" class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-red-600 hover:bg-red-700">Log Out</a>   
+        {% elif g.admn %}
+            <li class="block text-blue-200 py-2 px-4 border-b-2 border-blue-900 md:border-none font-bold"> ADMIN </li>
+            <a href="{{ url_for('admin.home') }}" class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-red-600 hover:bg-red-700">Orders</a>   
+            <a href="{{ url_for('admin.logout') }}" class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-red-600 hover:bg-red-700">Log Out</a>   
+        {% else %}
+            <a href="{{ url_for('auth.register') }}" class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-green-500 hover:bg-green-700">Register</a>
+            <a href="{{ url_for('auth.login') }}" class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-green-500 hover:bg-green-700">Log In</a>  
+            <a href="{{ url_for('admin.admin_login') }}" class="py-2 px-4 font-semibold rounded-lg shadow-md text-white hover:bg-gray-500">Admin</a>  
+        {% endif %}          
+    </div>
+</nav>
+
+<section class="content">
+    <header>
+        {% block header %}{% endblock %}
+    </header>
+    {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% block content %}
+        <div class="grid justify-items-stretch">
+            <p class="text-3xl text-center font-bold py-4">INVENTORY</p>
+            <div class="justify-self-center">
+                {% if g.admn %}
+                    <form action="{{ url_for('inventory.add_item') }}" method="GET">
+                        <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-black-500 bg-green-500 hover:bg-green-600" type="submit" value="Add items to inventory">
+                    </form>    
+                {% endif %}        
+            </div>
+        </div>
+
+        
+        <div class="h-48 flex flex-wrap content-start">
+            {% for item in items %}
+                <div class="mx-8 my-4">
+                    <h2 class="text-lg text-center font-bold">{{ item['item_name'] }}</h2>
+                    
+                    {% if g.admn %}
+                        <div class="flex justify-center">
+                            <h2 class="text-right">Cost : ₹{{ item['item_cost'] }}</h2>
+                        </div>
+                        <div class="flex justify-center">
+                            <h2 class="text-right">Availablility : {{ item['item_quantity'] }} units</h2>
+                        </div>
+                        
+                        <div class="flex items-center justify-between space-x-2">
+                            <form action="{{ url_for('inventory.update_item', itemname = item['item_name']) }}" method="GET">
+                                <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-black-500 bg-yellow-400 hover:bg-yellow-500" type="submit" value="Update">
+                            </form>
+
+                            <form action="{{ url_for('inventory.delete_item', itemname = item['item_name']) }}" method="POST">
+                                <input class="py-2 px-4 my-1 font-semibold rounded-lg shadow-md text-black-500 bg-red-500 hover:bg-red-600" type="submit" value="Delete">
+                            </form>
+                        </div>
+                    {% else %}
+                        {% if item['item_quantity'] == 0 %}
+                            <p class="text-s">Unavailable</p>
+                        {% else %}        
+                            <p class="text-s">{{item['item_quantity']}} units, available</p>
+                            <div class="flex items-center justify-between space-x-2">
+                                <form action="{{ url_for('inventory.item_order', itemname = item['item_name'], itemcost = item['item_cost'], itemquantity=item['item_quantity']) }}" method="GET">
+                                    <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-black-500 bg-yellow-400 hover:bg-yellow-500" type="submit" value="Buy">
+                                </form>
+                                <h2 class="text-right font-bold">Cost : ₹{{ item['item_cost'] }}</h2>
+                            </div>
+                        {% endif %}
+                        
+                    {% endif %}    
+                    
+                    
+                </div>
+            {% endfor %}
+
+        </div>
+
+    {% endblock %}
+</section>
+

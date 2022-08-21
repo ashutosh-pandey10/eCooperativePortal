@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col items-center m-auto h-screen bg-teal-lighter w-1/2 space-y-4">
+        <h1 class="text-3xl font-bold p-5"> Upload New File</h1>
+        <form class = "flex flex-row space-x-4" action = "/upload" method = "POST" 
+        enctype = "multipart/form-data">
+            <input class="py-2 px-4 rounded-lg font-semibold" type = "file" name = "file" />
+            <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-green-500 hover:bg-green-700" type = "submit" value="Upload">
+            
+        </form>
+
+        {% if 'upload_notification' in data %}
+            <p class="text-xl">{{ data['upload_notification'] }}</p>
+        {% endif %}
+        
+        {% if 'calculated_cost' in data %}
+            <p class="text-xl">{{ data['calculated_cost'] }}</p>
+
+            <div class="flex flex-row space-x-4">
+                <form action="{{ url_for('blog.confirm_order', id = data['id']) }}" method="POST">
+                    <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-green-500 hover:bg-green-700" type="submit" value="Confirm Order" >
+                </form>
+    
+                <form action="{{ url_for('blog.index') }}" method="GET">
+                    <input class="py-2 px-4 font-semibold rounded-lg shadow-md text-white bg-red-500 hover:bg-red-700" type="submit" value="Cancel" >
+                </form>    
+            </div>
+            
+            
+            
+            
+        {% endif %}
+    </div>
+    
+    
+{% endblock %}
