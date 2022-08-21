@@ -26,7 +26,9 @@ def create_app(test_config=None):
     except OSError:
         pass
     
-    app.config['UPLOAD_FOLDER'] = "/home/mouse/Major Project/Ecooperative_app/flaskr/uploaded_files/"
+    absolute_path = os.path.abspath(os.path.dirname(__file__))
+    parent_dir = os.path.join(absolute_path, os.pardir) 
+    app.config['UPLOAD_FOLDER'] = os.path.join(parent_dir, 'uploaded_files')
 
     from . import db
     db.init_app(app)
